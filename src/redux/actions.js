@@ -1,4 +1,4 @@
-import { FETCH_NEWS_LIST, FETCH_NEWS } from "./types"
+import { NEWS_ID, FETCH_NEWS } from "./types"
 
 export function fetchNewsList() {
 	return async dispatch => {
@@ -7,7 +7,7 @@ export function fetchNewsList() {
 		json.splice(2)
 		/*const news = json.map(async (item) => await (await fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`)).json())*/
 		dispatch({
-			type: FETCH_NEWS_LIST,
+			type: NEWS_ID,
 			payload: json
 		})
 	}

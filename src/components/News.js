@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchNews } from "../redux/actions";
 
 
-export default function News( {news} ) {
+export default function NewsList( {news} ) {
 	const dispatch = useDispatch();
-	const newsPost = useSelector(state => state.newsPost);
+	const newsPost = useSelector(state => state.newsPost.find(item => item.id === news));
 
 	useEffect(() => {
 		dispatch(fetchNews(news))
@@ -13,7 +13,7 @@ export default function News( {news} ) {
 
 	return (
 		<article>
-			{JSON.stringify(newsPost)}
+			{newsPost?.title}
 		</article>
 	)
 }
