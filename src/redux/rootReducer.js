@@ -1,20 +1,8 @@
-import { FETCH_NEWS, NEWS_ID } from "./types"
+import { combineReducers } from 'redux';
+import { appReducer } from "./appReducer";
+import { newsReducer } from "./newsReducer";
 
-const inititalState = {
-	newsList: [],
-	newsPost: []
-}
-
-export const rootReducer = (state = inititalState, action) => {
-	switch(action.type) {
-		case NEWS_ID:
-			console.log({...state, newsList: action.payload})
-			return {...state, newsList: action.payload};
-
-		case FETCH_NEWS:
-			console.log({...state, newsPost: [...state.newsPost, action.payload]})
-			return {...state, newsPost: [...state.newsPost, action.payload]}
-
-		default: return state
-	}
-}
+export const rootReducer = combineReducers({
+	news: newsReducer,
+	app: appReducer
+})
