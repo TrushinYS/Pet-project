@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchNewsItem } from "../../redux/actions";
+import {FaRegComments} from 'react-icons/fa'
+import { fetchNewsItem, autoUpdateComments, loadComments } from "../../redux/actions";
 import Loader from '../Loader';
 
 export default function NewsItemPage() {
@@ -10,6 +11,7 @@ export default function NewsItemPage() {
 
 	const loader = useSelector(state => state.app)
 	const news = useSelector(state => state.news.newsItem)
+	const newsComments = useSelector(state => state.news.newsItemComments)
 
 	const params = useParams();
 	const newsID = params.id;
@@ -18,12 +20,16 @@ export default function NewsItemPage() {
 		dispatch(fetchNewsItem(30808945));
 	}, [])
 
+	useEffect(() => {
+		dispatch(autoUpdateComments(news))
+	}, [newsComments])
+
 	const backOnNewsListPage = () => {
 		navigate('/')
 	}
 
 	const onUpdateComments = () => {
-		dispatch(fetchNewsItem(newsID))
+		dispatch(loadComments(news));
 	}
 
 	const onCheckDateNews = () => {
@@ -55,11 +61,10 @@ export default function NewsItemPage() {
 						<div className="card-content white-text">
 							<p className="card-title">{news?.title}</p>
 							<a className="orange-text" href={news?.url}>URL: {news?.url}</a>
+							<p className="white-text">Автор: {news?.by} | Дата: {dateNews} | <FaRegComments/> : {news?.kids ? news.kids.length : 0}</p>
 						</div>
 						<div className="card-action">
-							<span className="orange-text">Рейтинг: {news?.score} | Автор: {news?.by} | Дата публикации: {dateNews} </span>
-							<p className="white-text">Количество комментариев: {news?.kids ? news.kids.length : 0}</p>
-							<i className="glyphicon glyphicon-cloud medium"></i>
+							
 						</div>
 					</article>
 				)}

@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { autoFetchNewsList, fetchNewsList } from '../../redux/actions';
+import { fetchNewsList } from '../../redux/actions';
 import NewsItem from './NewsItem';
 import Loader from '../Loader';
 
 export default function NewsListPage() {
 	const dispatch = useDispatch();
 
-	const newsList = useSelector(state => state.news.newsList);
 	const loader = useSelector(state => state.app)
+	const newsList = useSelector(state => state.news.newsList);
 	
 	const onUpdateNews = () => {
 		dispatch(fetchNewsList())
@@ -18,6 +18,11 @@ export default function NewsListPage() {
 		console.log('обычный fetch')
 		dispatch(fetchNewsList());
 	}, [])
+
+	/*useEffect(() => {
+		console.log('auto update');
+		dispatch(autoUpdateNewsList())
+	}, [newsList])*/
 	
 	return (
 		<div className="container center">
