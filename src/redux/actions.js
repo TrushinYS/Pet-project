@@ -1,47 +1,30 @@
-import { HIDE_LOADER, NEWS_ITEM, NEWS_LIST, SHOW_LOADER, NEWS_ITEM_COMMENTS } from "./types"
+import { HIDE_LOADER, NEWS_ITEM, NEWS_LIST, SHOW_LOADER } from "./types"
 
 let timerNewsList = null;
 let timerNewsItemPage = null;
 
 export function fetchNewsList() {
+	clearTimeout(timerNewsItemPage)
 	return async dispatch => {
-		dispatch(showLoader());
+		dispatch(showLoader())
 
 		const response = await fetch('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty')
+
 		const json = await response.json();
-		json.splice(10)
+		json.splice(100)
 
-		const news = await Promise.all(json.map((item) => fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`)))
-		const newsList = await Promise.all(news.map(item => item.json()))
+		const newsList = await Promise.all(json.map((item) => fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`)))
 
-		setTimeout(() => {
-			dispatch({
-				type: NEWS_LIST,
-				payload: newsList
-			})
-			dispatch(hideLoader())
-		}, 500)
-	}
-}
-
-export function fetchNewsItem(id) {
-	clearTimeout(timerNewsList)
-	return async dispatch => {
-		dispatch(showLoader());
-
-		const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`)
-		const news = await response.json()
-
-		setTimeout(() => {
-			dispatch({
-				type: NEWS_ITEM,
-				payload: news
-			})
+		const newsListJSON = await Promise.all(newsList.map(item => item.json()))
+		const fetchNewsList = await Promise.all(newsListJSON.map(item => onConvertDate(item)))
+		
+		dispatch({
+			type: NEWS_LIST,
+			payload: fetchNewsList
 			
-			dispatch(hideLoader())
-		}, 1000)
+		});
 
-		dispatch(loadComments(news));
+		dispatch(hideLoader())
 	}
 }
 
@@ -49,50 +32,105 @@ export function autoUpdateNewsList() {
 	clearTimeout(timerNewsList)
 
 	return async dispatch => {
+		const autoResponse = await fetch('https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty')
+
+		const autoJson = await autoResponse.json();
+		autoJson.splice(100);
+
+		const autoNewsList = await Promise.all(autoJson.map((item) => fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`)));
+
+		const autoNewsListJSON = await Promise.all(autoNewsList.map(item => item.json()));
+		const autoFetchNewsList = await Promise.all(autoNewsListJSON.map(item => onConvertDate(item)));
+
 		timerNewsList = setTimeout(() => {
-			console.log('timerNewsList')
-			dispatch(fetchNewsList())
-		}, 10000)
+			console.log('timerNewsList');
+
+			dispatch({
+				type: NEWS_LIST,
+				payload: autoFetchNewsList
+				
+			})
+		}, 60000)
 	}
 }
 
-export function loadComments(news) {
-	clearTimeout(timerNewsItemPage)
-	const comment = JSON.parse(JSON.stringify(news));
+export function fetchNewsItem(id) {
 
 	return async dispatch => {
-		dispatch(updateComments(comment));
+		dispatch(showLoader());
 
-		dispatch({
-			type: NEWS_ITEM_COMMENTS,
-			payload: comment
-		})
+		const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`);
+
+		const newsItem = await response.json();
+		const fetchNewsItem = await onConvertDate(newsItem);
+		dispatch(loadComments(fetchNewsItem));
+
+		setTimeout(() => {
+			dispatch({
+				type: NEWS_ITEM,
+				payload: newsItem
+			});
+			
+			dispatch(hideLoader())
+		}, 1000)
+
+		
 	}
 }
 
-function updateComments(comment) {
+export function autoUpdateNewsItem(id) {
+	clearTimeout(timerNewsList);
+	clearTimeout(timerNewsItemPage);
+
 	return async dispatch => {
-		if (!comment.kids) {
+		const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`);
+
+		const newsItem = await response.json();
+		const fetchNewsItem = await onConvertDate(newsItem);
+		dispatch(loadComments(fetchNewsItem));
+
+		timerNewsItemPage = setTimeout(() => {
+			dispatch({
+				type: NEWS_ITEM,
+				payload: fetchNewsItem
+			})
+		}, 60000)
+	}
+}
+
+function loadComments(news) {
+	return async dispatch => {
+		if (!news.kids) {
 			return
-		} else {
-			const commentKids = await Promise.all(comment.kids.map(item => fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`)))
-			const commentKidsJson = await Promise.all(commentKids.map(item => item.json()))
 
-			comment.kids = commentKidsJson;
-			commentKidsJson.map(item => dispatch(updateComments(item)))
+		} else {
+			const newsKids = await Promise.all(news.kids.map(item => fetch(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`)))
+
+			const newsKidsJson = await Promise.all(newsKids.map(item => item.json()))
+			await Promise.all(newsKidsJson.sort((a, b) => a.time - b.time))
+			const newsComments = await Promise.all(newsKidsJson.map(item => onConvertDate(item)))
+
+			news.kids = newsComments;
+			news.kids.map(item => dispatch(loadComments(item)))
 		}
 	}
 }
 
-export function autoUpdateComments(comment) {
-	clearTimeout(timerNewsItemPage)
+async function onConvertDate(news) {
+	const postDate = new Date(news.time*1000)
+	const postYear = postDate.getFullYear();
+	
+	let postMonth = postDate.getMonth();
+	postMonth = postMonth < 10 ? `0${postMonth}` : postMonth
+	
+	let postDay = postDate.getDate();
+	postDay = postDay < 10 ? `0${postDay}` : postDay
+			
+	const postHours = postDate.getHours();
+	const postMin = postDate.getMinutes();
 
-	return async dispatch => {
-		timerNewsItemPage = setTimeout(() => {
-			console.log('timerNewsItemPage')
-			dispatch(loadComments(comment))
-		}, 10000)
-	}
+	news.time = `${postHours}:${postMin} ${postDay}.${postMonth}.${postYear}`
+	return news;
 }
 
 function showLoader() {
@@ -100,7 +138,6 @@ function showLoader() {
 		type: SHOW_LOADER
 	}
 }
-
 
 function hideLoader() {
 	return {

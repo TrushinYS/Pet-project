@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchNewsList } from '../../redux/actions';
+import { fetchNewsList, autoUpdateNewsList } from '../../redux/actions';
 import NewsItem from './NewsItem';
 import Loader from '../Loader';
 
@@ -19,10 +19,10 @@ export default function NewsListPage() {
 		dispatch(fetchNewsList());
 	}, [])
 
-	/*useEffect(() => {
-		console.log('auto update');
+	useEffect(() => {
+		console.log('autoUpdateList')
 		dispatch(autoUpdateNewsList())
-	}, [newsList])*/
+	}, [newsList])
 	
 	return (
 		<div className="container center">
@@ -36,9 +36,3 @@ export default function NewsListPage() {
 		</div>
 	)
 }
-//пытался сделать автообновление данных с сервера, поместив нижеуказанный код в useEffect, но при переходе на другую страницу, данные всё также обновляются
-/*setTimeout(function Update() {
-	console.log('автоматическое обновление')
-	dispatch(fetchNewsList())
-	setTimeout(Update, 10000)
-}, 10000)*/

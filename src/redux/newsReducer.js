@@ -2,8 +2,7 @@ import { NEWS_ITEM, NEWS_ITEM_COMMENTS, NEWS_LIST } from "./types"
 
 const inititalState = {
 	newsList: [],
-	newsItem: {},
-	newsItemComments: {}
+	newsItem: [],
 }
 
 export const newsReducer = (state = inititalState, action) => {
@@ -15,10 +14,6 @@ export const newsReducer = (state = inititalState, action) => {
 		case NEWS_ITEM:
 			console.log({newsItem: action.payload})
 			return {...state, newsItem: action.payload}
-		
-		case NEWS_ITEM_COMMENTS:
-			console.log({newsItemComments: action.payload})
-			return {...state, newsItemComments: action.payload}
 
 		default: return state
 	}
