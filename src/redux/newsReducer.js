@@ -1,4 +1,4 @@
-import { NEWS_ITEM, NEWS_ITEM_COMMENTS, NEWS_LIST } from "./types"
+import { NEWS_ITEM, NEWS_LIST } from "./types"
 
 const inititalState = {
 	newsList: [],

@@ -3,7 +3,7 @@ import RootCommentItem from './RootCommentItem'
 
 export default function CommentsList({newsItem, amountComments}) {
 
-	if (!amountComments) {
+	if (amountComments === 0) {
 		return <p className="white-text">Комментариии отсутствуют</p>
 	}
 

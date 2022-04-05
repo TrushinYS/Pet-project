@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import NewsListPage from "./components/MainPage/NewsListPage";
-import NewsItemPage from "./components/SecondPage/NewsItemPage";
+import NewsListPage from "./components/pages/MainPage/NewsListPage";
+import NewsItemPage from "./components/pages/NewsPage/NewsItemPage";
 
 
 export default function App() {
