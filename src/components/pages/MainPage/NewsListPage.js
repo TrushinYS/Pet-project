@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { onLoadNewsList, autoUpdateNewsList } from '../../../redux/actions';
-import NewsItem from './NewsItem';
-import Loader from '../../shared/Loader';
+import { onLoadNewsList, autoUpdateNewsList } from '../../../core/redux/actions';
+import NewsItem from './LittleNewsItemCard/LittleNewsItemCard';
+import Loader from '../../elements/Loader';
+import ErrorMessage from '../../elements/ErrorMessage';
 
 export default function NewsListPage() {
 	const dispatch = useDispatch();
 
-	const pageLoader = useSelector(state => state.app.page)
 	const newsList = useSelector(state => state.news.newsList);
+	const pageLoader = useSelector(state => state.app.page)
+	const fetchErrorMessage = useSelector(state => state.app.fetchError)
 	
 	const onUpdateNews = () => {
 		dispatch(onLoadNewsList());
@@ -30,6 +32,9 @@ export default function NewsListPage() {
 	
 	return (
 		<div className="container center">
+			{fetchErrorMessage && 
+				<ErrorMessage/>
+			}
 			<h3>Последние 100 новостей</h3>
 			<section>
 				<button onClick={onUpdateNews} className="waves-effect waves-light btn"><i className="material-icons left">cloud</i>Обновить новости</button>

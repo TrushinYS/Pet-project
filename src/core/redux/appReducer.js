@@ -1,4 +1,8 @@
-import { SHOW_LOADER_PAGE, HIDE_LOADER_PAGE, SHOW_LOADER_COMMENTS, HIDE_LOADER_COMMENTS } from "./types";
+import { SHOW_LOADER_PAGE, 
+	HIDE_LOADER_PAGE, 
+	SHOW_LOADER_COMMENTS, 
+	HIDE_LOADER_COMMENTS,
+	FETCH_ERROR_MESSAGE } from "./types";
 
 const inititalState = {
 	page: false,
@@ -16,6 +20,8 @@ export const appReducer = (state = inititalState, action) => {
 			return {...state, comments: true};
 		case HIDE_LOADER_COMMENTS:
 			return {...state, comments: false};
+		case FETCH_ERROR_MESSAGE:
+			return {...state, fetchError: action.payload};
 		default: return state
 	}
 }
