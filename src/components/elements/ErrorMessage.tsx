@@ -1,9 +1,11 @@
-import React from "react";
+import { FC } from "react";
 
-export default function ErrorMessage() {
+const ErrorMessage: FC = () => {
 	return(
 		<div className="card red">
 			<p className="card-title">Что-то пошло не так. Пожалуйста, обновите страницу</p>
 		</div>
 	)
 }
+
+export default ErrorMessage

@@ -1,12 +1,13 @@
-import React from "react";
+import {FC} from "react";
 import { useNavigate } from 'react-router-dom'
+import {LittleNewsItemCardProps} from '../../../../core/redux/types/Newstypes';
 
-export default function NewsItem( {news} ) {
+const LittleNewsItemCard: FC<LittleNewsItemCardProps> = ( {news} ) => {
 	const navigate= useNavigate();
 
 	const openNewsItemPage = () => {
 		navigate('/' + news.id)
-	}
+	};
 
 	return (
 		<article onClick={openNewsItemPage} className="card blue-grey darken-1 hoverable cursor ">
@@ -19,4 +20,6 @@ export default function NewsItem( {news} ) {
 		</article>
 		
 	)
-}
+};
+
+export default LittleNewsItemCard;

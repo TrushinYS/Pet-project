@@ -1,19 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, useEffect } from "react";
 import {FaRegComments} from 'react-icons/fa';
-import {  autoUpdateNewsItem} from "../../../../core/redux/actions";
 import CommentsList from './CommentsList';
 import Loader from '../../../elements/Loader';
+import {FullNewsItemCardProps} from '../../../../core/redux/types/Newstypes';
+import { useTypedSelector } from "../../../../core/hooks/useTypedSelector";
+import { useActions } from "../../../../core/hooks/useActions";
 
-export default function FullNewsItemCard({ newsItemID }) {
-	const dispatch = useDispatch();
 
-	const commentsLoader = useSelector(state => state.app.comments);
-	const newsItem = useSelector(state => state.news.newsItem)
+const FullNewsItemCard: FC<FullNewsItemCardProps> = ({ newsItemID }) => {
+	const commentsLoader = useTypedSelector(state => state.app.comments);
+	const newsItem = useTypedSelector(state => state.news.newsItem);
+
+	const {autoUpdateNewsItem} = useActions();
 
 	useEffect(() => {
 		console.log('autoUpdateNewsItem')
-		dispatch(autoUpdateNewsItem(newsItemID))
+		autoUpdateNewsItem(newsItemID)
 	}, [newsItem])
 
 	return (
@@ -26,4 +28,6 @@ export default function FullNewsItemCard({ newsItemID }) {
 			{commentsLoader ? <Loader/> : <CommentsList newsItem = {newsItem}/>}
 		</article>
 	)
-}
+};
+
+export default FullNewsItemCard;

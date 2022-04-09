@@ -1,9 +1,10 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import {FC} from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NewsListPage from "./components/pages/MainPage/NewsListPage";
 import NewsItemPage from "./components/pages/SecondPage/NewsItemPage";
 
 
-export default function App() {
+const App:FC = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -14,3 +15,5 @@ export default function App() {
 		
 	);
 }
+
+export default App

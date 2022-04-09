@@ -1,6 +1,6 @@
-import React from 'react';
+import { FC } from 'react';
 
-const Loader = () => (
+const Loader:FC = () => (
 	<div className="lds-ring"><div></div><div></div><div></div><div></div></div>
 )
 

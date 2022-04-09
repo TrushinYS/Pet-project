@@ -1,16 +1,19 @@
-import React from "react";
-import RootCommentItem from './RootCommentItem'
+import {FC, Fragment} from "react";
+import RootCommentItem from './RootCommentItem';
+import {CommentsListProps} from '../../../../core/redux/types/Newstypes';
 
-export default function CommentsList({ newsItem }) {
+const CommentsList: FC<CommentsListProps> = ({ newsItem }) => {
 
 	if (!newsItem.kids) {
 		return <p className="white-text">Комментариии отсутствуют</p>
 	}
 
 	return (
-		<React.Fragment>
+		<Fragment>
 			<p className="yellow-text">Комментарии к посту:</p>
 			{newsItem.kids.map((rootComment) => <RootCommentItem key = {rootComment.id} rootComment = {rootComment}/>)}
-		</React.Fragment>
+		</Fragment>
 	)
 }
+
+export default CommentsList

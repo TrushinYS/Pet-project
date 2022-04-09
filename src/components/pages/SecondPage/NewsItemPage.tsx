@@ -1,24 +1,24 @@
-import React, {useEffect} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {FC, useEffect} from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { onUpdateCommentsNewsItem, onLoadNewsItem } from "../../../core/redux/actions";
 import FullNewsItemCard from './elements/FullNewsItemCard';
 import Loader from '../../elements/Loader';
 import ErrorMessage from "../../elements/ErrorMessage";
+import { useTypedSelector } from '../../../core/hooks/useTypedSelector';
+import {useActions} from '../../../core/hooks/useActions'
 
-export default function NewsItemPage() {
+const NewsItemPage: FC =() => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const {onUpdateCommentsNewsItem, onLoadNewsItem} = useActions();
 
-	const pageLoader = useSelector(state => state.app.page)
-	const fetchErrorMessage = useSelector(state => state.app.fetchError)
+	const pageLoader = useTypedSelector(state => state.app.page)
+	const fetchErrorMessage = useTypedSelector(state => state.app.fetchError)
 
 	const params = useParams();
 	const newsItemID = params.id;
 
 	useEffect(() => {
 		console.log('onLoadNewsItem')
-		dispatch(onLoadNewsItem(newsItemID));
+		onLoadNewsItem(newsItemID);
 	}, [])
 
 	const backOnNewsListPage = () => {
@@ -26,7 +26,7 @@ export default function NewsItemPage() {
 	}
 
 	const onUpdateComments = () => {
-		dispatch(onUpdateCommentsNewsItem(newsItemID));
+		onUpdateCommentsNewsItem(newsItemID);
 	}
 
 	return (
@@ -44,3 +44,5 @@ export default function NewsItemPage() {
 		</main>
 	)
 }
+
+export default NewsItemPage

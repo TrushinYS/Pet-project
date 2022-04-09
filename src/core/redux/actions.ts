@@ -1,58 +1,51 @@
-import { 
-	HIDE_LOADER_PAGE, 
-	NEWS_ITEM, NEWS_LIST, 
-	SHOW_LOADER_PAGE, 
-	SHOW_LOADER_COMMENTS, 
-	HIDE_LOADER_COMMENTS, 
-	FETCH_ERROR_MESSAGE} from "./types";
-
+import { AppActions, AppActionTypes } from "./types/Apptypes";
+import { ILittleNewsItemCardWithConvDate, NewsActions, NewsActionTypes, NewsID, IFullNewsItem } from "./types/Newstypes"
 import { onConvertDate } from "../helpers/index";
-import Api from '../shared/api/index.ts';
+import Api from '../shared/api/index';
+import { Dispatch } from 'redux'
 
-let timerNewsList = null; 
-let timerNewsItemPage = null;
+let timerNewsList: ReturnType<typeof setTimeout>;
+let timerNewsItemPage: ReturnType<typeof setTimeout>;
 
-let timeSecond = 0;
-let timerToUpdate = null;
+let timeSecond: number = 0;
+let timerToUpdate: ReturnType<typeof setTimeout>;
 
 //общая функция для загрузки новостей
-async function onFetchNewsList() {
-	const newsListID = await Api.fetchNewsListID();
-	const newsList = await Api.fetchNewsList(newsListID);
-
-	const fetchNewsList = newsList.map(item => onConvertDate(item))
-	return fetchNewsList
+async function onFetchNewsList(): Promise<ILittleNewsItemCardWithConvDate[]> {
+	const newsListID = await Api.onFetchNewsListID();
+	const newsList = await Api.onFetchNewsList(newsListID);
+	return newsList
 }
 
 //первичная/принудительная(по клику на кнопку) загрузка новостей
 export function onLoadNewsList() {
 	clearTimeout(timerNewsList)
 	
-	return async dispatch => {
+	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		dispatch({
-			type: SHOW_LOADER_PAGE,
+			type: AppActionTypes.SHOW_LOADER_PAGE,
 		});
 		dispatch({
-			type: FETCH_ERROR_MESSAGE,
+			type: AppActionTypes.FETCH_ERROR_MESSAGE,
 			payload: false,
 		})
 		
 		try {
 			const newsList = await onFetchNewsList()
 			dispatch({
-				type: NEWS_LIST,
+				type: NewsActionTypes.NEWS_LIST,
 				payload: newsList
 			});
 
 		} catch(e) {
 			dispatch({
-				type: FETCH_ERROR_MESSAGE,
+				type: AppActionTypes.FETCH_ERROR_MESSAGE,
 				payload: true,
 			});
 
 		} finally {
 			dispatch({
-				type: HIDE_LOADER_PAGE
+				type: AppActionTypes.HIDE_LOADER_PAGE
 			});
 		}
 	}
@@ -67,24 +60,24 @@ export function autoUpdateNewsList() {
 	const timeSecNewsList = timeSecond * 1000;
 	timeSecond = 0;
 
-	return async dispatch => {
+	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		return timerNewsList = setTimeout(async function() {
 			dispatch({
-				type: FETCH_ERROR_MESSAGE,
+				type: AppActionTypes.FETCH_ERROR_MESSAGE,
 				payload: false,
 			});
 
 			try {
 				const autoNewsList = await onFetchNewsList()
 				dispatch({
-					type: NEWS_LIST,
+					type: NewsActionTypes.NEWS_LIST,
 					payload: autoNewsList
 					
 				})
 
 			} catch(e) {
 				dispatch({
-					type: FETCH_ERROR_MESSAGE,
+					type: AppActionTypes.FETCH_ERROR_MESSAGE,
 					payload: true,
 				});
 			}
@@ -93,14 +86,14 @@ export function autoUpdateNewsList() {
 }
 
 //общая функция для загрузки данных новости
-async function onFetchNewsItem(id) {
-	const newsItem = await Api.fetchNewsItem(id);
+async function onFetchNewsItem(id: NewsID) {
+	const newsItem = await Api.onFetchNewsItem(id);
 	const fetchNewsItem = onConvertDate(newsItem);
 	return fetchNewsItem
 }
 
 //первичная загрузка новости при входе на её страницу
-export function onLoadNewsItem(id) {
+export function onLoadNewsItem(id: NewsID) {
 	clearTimeout(timerNewsList)
 	clearInterval(timerToUpdate)
 
@@ -112,13 +105,13 @@ export function onLoadNewsItem(id) {
 		++timeSecond
 	}, 1000)
 
-	return async dispatch => {
+	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		dispatch({
-			type: SHOW_LOADER_PAGE
+			type: AppActionTypes.SHOW_LOADER_PAGE
 		});
 
 		dispatch({
-			type: FETCH_ERROR_MESSAGE,
+			type: AppActionTypes.FETCH_ERROR_MESSAGE,
 			payload: false,
 		});
 
@@ -127,36 +120,36 @@ export function onLoadNewsItem(id) {
 			const newsItem = await onLoadComments(fetchNewsItem);
 			
 			dispatch({
-				type: NEWS_ITEM,
+				type: NewsActionTypes.NEWS_ITEM,
 				payload: newsItem
 			});
 
 		} catch(e) {
 			dispatch({
-			type: FETCH_ERROR_MESSAGE,
+			type: AppActionTypes.FETCH_ERROR_MESSAGE,
 			payload: true,
 		});
 
 		} finally {
 			dispatch({
-				type: HIDE_LOADER_PAGE
+				type: AppActionTypes.HIDE_LOADER_PAGE
 			});
 		}
 	}
 }
 
 //обновление новости по клику на кнопку
-export function onUpdateCommentsNewsItem(id) {
+export function onUpdateCommentsNewsItem(id: NewsID) {
 	clearTimeout(timerNewsItemPage);
 
-	return async dispatch => {
+	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		dispatch({
-			type: SHOW_LOADER_COMMENTS
+			type: AppActionTypes.SHOW_LOADER_COMMENTS
 		});
 
 		dispatch({
-			type: FETCH_ERROR_MESSAGE,
-			payload: false,
+			type: AppActionTypes.FETCH_ERROR_MESSAGE,
+			payload: false
 		});
 
 		try {
@@ -165,7 +158,7 @@ export function onUpdateCommentsNewsItem(id) {
 
 			setTimeout(() => {
 				dispatch({
-					type: NEWS_ITEM,
+					type: NewsActionTypes.NEWS_ITEM,
 					payload: newsItem
 				});
 			}, 500)
@@ -173,7 +166,7 @@ export function onUpdateCommentsNewsItem(id) {
 		} catch(e) {
 			setTimeout(() => {
 				dispatch({
-					type: FETCH_ERROR_MESSAGE,
+					type: AppActionTypes.FETCH_ERROR_MESSAGE,
 					payload: true,
 				});
 			}, 500)
@@ -181,7 +174,7 @@ export function onUpdateCommentsNewsItem(id) {
 		} finally {
 			setTimeout(() => {
 				dispatch({
-					type: HIDE_LOADER_COMMENTS
+					type: AppActionTypes.HIDE_LOADER_COMMENTS
 				});
 			}, 500)
 		}
@@ -189,13 +182,13 @@ export function onUpdateCommentsNewsItem(id) {
 }
 
 //автообновление страницы новости
-export function autoUpdateNewsItem(id) {
+export function autoUpdateNewsItem(id: NewsID) {
 	clearTimeout(timerNewsItemPage);
 
-	return async dispatch => {
+	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		return timerNewsItemPage = setTimeout(async function() {
 			dispatch({
-				type: FETCH_ERROR_MESSAGE,
+				type: AppActionTypes.FETCH_ERROR_MESSAGE,
 				payload: false,
 			});
 
@@ -204,13 +197,13 @@ export function autoUpdateNewsItem(id) {
 				const newsItem = await onLoadComments(fetchNewsItem);
 
 				dispatch({
-					type: NEWS_ITEM,
+					type: NewsActionTypes.NEWS_ITEM,
 					payload: newsItem
 				})
 				
 			} catch(e) {
 				dispatch({
-					type: FETCH_ERROR_MESSAGE,
+					type: AppActionTypes.FETCH_ERROR_MESSAGE,
 					payload: true,
 				});
 			}
@@ -219,12 +212,12 @@ export function autoUpdateNewsItem(id) {
 }
 
 //рекурсивная функция загрузки комментариев новости
-async function onLoadComments(newsPost) {
+async function onLoadComments(newsPost: ILittleNewsItemCardWithConvDate) : Promise<IFullNewsItem> {
 	const news = JSON.parse(JSON.stringify(newsPost));
 	if (!news.kids) {
 		return news;
 	} else {
-		const newsKids = await Api.fetchNewsList(news.kids);
+		const newsKids = await Promise.all(news.kids.map((item: NewsID) => Api.onFetchNewsItemComments(item)));
 		const activeNewsKids = newsKids.filter(item => !item.deleted && !item.dead);
 		activeNewsKids.sort((a, b) => a.time - b.time);
 
