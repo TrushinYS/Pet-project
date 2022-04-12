@@ -17,7 +17,7 @@ const NewsItemPage: FC =() => {
 	const newsItemID = params.id;
 
 	useEffect(() => {
-		onLoadNewsItem(newsItemID);
+		onLoadNewsItem('30808945');
 	}, []);
 
 	const backOnNewsListPage = () => {
