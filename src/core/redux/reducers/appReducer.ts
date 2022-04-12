@@ -1,4 +1,6 @@
-import { AppActions, AppActionTypes, AppState } from "../types/Apptypes";
+import { AppActions, 
+	AppActionTypes, 
+	AppState } from '@Redux/types/Apptypes';
 
 const inititalState: AppState = {
 	page: false,
@@ -20,4 +22,4 @@ export const appReducer = (state = inititalState, action: AppActions):AppState =
 			return {...state, fetchError: action.payload};
 		default: return state
 	}
-}
+};

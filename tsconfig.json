@@ -17,8 +17,19 @@
 	  "moduleResolution": "node",
 	  "resolveJsonModule": true,
 	  "isolatedModules": true,
-	  "noEmit": true,
-	  "jsx": "react-jsx"
+	  "noEmit": false,
+	  "jsx": "react-jsx",
+	  "baseUrl": ".",
+	  "paths": {
+		"@/*": ["src/*"],
+		"@Pages/*": ["src/components/pages/*"],
+		"@Elements/*": ["src/components/elements/*"],
+		"@Helpers/*": ["src/core/helpers/*"],
+		"@Hooks/*": ["src/core/hooks/*"],
+		"@Redux/*": ["src/core/redux/*"],
+		"@Api/*": ["src/core/shared/api/*"],
+		"@Css": ["src/css/*"]
+	  },
 	},
 	"include": [
 	  "src"

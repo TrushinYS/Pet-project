@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import './styles/main-page.css';
-import App from './App';
-import { rootReducer } from './core/redux/reducers/rootReducer';
+import '@Css/style.css';
+import App from '@/App';
+import { rootReducer } from '@Redux/reducers/rootReducer';
 
 const store = createStore(rootReducer, composeWithDevTools(
 	applyMiddleware(thunk)

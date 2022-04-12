@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NewsListPage from "./components/pages/MainPage/NewsListPage";
-import NewsItemPage from "./components/pages/SecondPage/NewsItemPage";
+import NewsListPage from '@Pages/MainPage/NewsListPage';
+import NewsItemPage from '@Pages/SecondPage/NewsItemPage';
 
 
 const App:FC = () => {

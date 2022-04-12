@@ -1,10 +1,10 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect } from 'react';
 import {FaRegComments} from 'react-icons/fa';
-import CommentsList from './CommentsList';
-import Loader from '../../../elements/Loader';
-import {FullNewsItemCardProps} from '../../../../core/redux/types/Newstypes';
-import { useTypedSelector } from "../../../../core/hooks/useTypedSelector";
-import { useActions } from "../../../../core/hooks/useActions";
+import CommentsList from '@Pages/SecondPage/elements/CommentsList';
+import Loader from '@Elements/Loader';
+import {FullNewsItemCardProps} from '@Redux/types/Newstypes';
+import { useTypedSelector } from '@Hooks/useTypedSelector';
+import { useActions } from '@Hooks/useActions';
 
 
 const FullNewsItemCard: FC<FullNewsItemCardProps> = ({ newsItemID }) => {
@@ -14,15 +14,14 @@ const FullNewsItemCard: FC<FullNewsItemCardProps> = ({ newsItemID }) => {
 	const {autoUpdateNewsItem} = useActions();
 
 	useEffect(() => {
-		console.log('autoUpdateNewsItem')
 		autoUpdateNewsItem(newsItemID)
-	}, [newsItem])
+	}, [newsItem]);
 
 	return (
-		<article className="card blue-grey darken-1 news-item-article">
-			<div className="card-content white-text">
-				<p className="card-title">{newsItem.title || 'Заголовок новости'}</p>
-				<a target={'blank'} className="orange-text" href={newsItem.url || '#!'}>URL: {newsItem.url || 'Отсутствует'}</a>
+		<article className = 'card blue-grey darken-1 news-item-article'>
+			<div className = 'card-content white-text'>
+				<p className = 'card-title'>{newsItem.title || 'Заголовок новости'}</p>
+				<a target = {'blank'} className = 'orange-text' href = {newsItem.url || '#!'}>URL: {newsItem.url || 'Отсутствует'}</a>
 				<p>Автор: {newsItem.by || 'Неизвестен'} | Дата: {newsItem.time || 'Время неизвестно'} | <FaRegComments/> : {newsItem.kids ? newsItem.kids.length : 0}</p>
 			</div>
 			{commentsLoader ? <Loader/> : <CommentsList newsItem = {newsItem}/>}

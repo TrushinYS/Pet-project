@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { appReducer } from "./appReducer";
-import { newsReducer } from "./newsReducer";
+import { appReducer } from '@Redux/reducers/appReducer';
+import { newsReducer } from '@Redux/reducers/newsReducer';
 
 export const rootReducer = combineReducers({
 	news: newsReducer,
 	app: appReducer
-})
+});

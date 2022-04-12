@@ -1,4 +1,6 @@
-import { NewsActions, NewsActionTypes, NewsState } from "../types/Newstypes"
+import { NewsActions, 
+	NewsActionTypes, 
+	NewsState } from '@Redux/types/Newstypes';
 
 const inititalState: NewsState = {
 	newsList: [],
@@ -12,18 +14,16 @@ const inititalState: NewsState = {
 		type: '',
 		url: '',
 	},
-}
+};
 
 export const newsReducer = (state = inititalState, action:NewsActions):NewsState => {
 	switch(action.type) {
 		case NewsActionTypes.NEWS_LIST:
-			console.log({newsList: action.payload})
 			return {...state, newsList: action.payload};
 
 		case NewsActionTypes.NEWS_ITEM:
-			console.log({newsItem: action.payload})
 			return {...state, newsItem: action.payload}
 
 		default: return state
 	}
-}
+};
