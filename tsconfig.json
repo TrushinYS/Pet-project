@@ -24,10 +24,9 @@
 		"@/*": ["src/*"],
 		"@Pages/*": ["src/components/pages/*"],
 		"@Elements/*": ["src/components/elements/*"],
-		"@Helpers/*": ["src/core/helpers/*"],
+		"@Shared/*": ["src/core/shared/*"],
 		"@Hooks/*": ["src/core/hooks/*"],
 		"@Redux/*": ["src/core/redux/*"],
-		"@Api/*": ["src/core/shared/api/*"],
 		"@Css": ["src/css/*"]
 	  },
 	},

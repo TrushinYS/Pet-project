@@ -1,6 +1,6 @@
 import { NewsActions, 
 	NewsActionTypes, 
-	NewsState } from '@Redux/types/Newstypes';
+	NewsState } from '@Redux/types/newsTypes';
 
 const inititalState: NewsState = {
 	newsList: [],

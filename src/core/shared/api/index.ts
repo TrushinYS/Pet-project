@@ -1,9 +1,9 @@
 import { ILittleNewsItemCardWithConvDate, 
 	ILittleNewsItemCard, 
 	NewsID, 
-	TypesOfComments } from '@Redux/types/Newstypes';
+	TypesOfComments } from '@Redux/types/newsTypes';
 
-import { onConvertDate } from '@Helpers/index';
+import { onConvertDate } from '@Shared/helpers';
 
 const hackerNewsID: string = 'https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty&orderBy=%22$key%22&limitToFirst=100';
 const hackerNewsItemPart1: string = 'https://hacker-news.firebaseio.com/v0/item/';

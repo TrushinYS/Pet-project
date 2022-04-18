@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NewsListPage from '@Pages/MainPage/NewsListPage';
-import NewsItemPage from '@Pages/SecondPage/NewsItemPage';
-
+import NewsListPage from '@Pages/MainPage';
+import NewsItemPage from '@Pages/SecondPage';
 
 const App:FC = () => {
 	return (

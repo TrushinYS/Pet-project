@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {LittleNewsItemCardProps} from '@Redux/types/Newstypes';
+import {LittleNewsItemCardProps} from '@Redux/types/newsTypes';
 
 const LittleNewsItemCard: FC<LittleNewsItemCardProps> = ( {news} ) => {
 	const navigate= useNavigate();

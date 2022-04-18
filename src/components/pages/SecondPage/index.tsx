@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import FullNewsItemCard from '@Pages/SecondPage/elements/FullNewsItemCard';
+import FullNewsItemCard from '@Pages/SecondPage/FullNewsItemCard';
 import Loader from '@Elements/Loader';
 import ErrorMessage from '@Elements/ErrorMessage';
 import { useTypedSelector } from '@Hooks/useTypedSelector';
@@ -17,7 +17,7 @@ const NewsItemPage: FC =() => {
 	const newsItemID = params.id;
 
 	useEffect(() => {
-		onLoadNewsItem('30808945');
+		onLoadNewsItem(newsItemID);
 	}, []);
 
 	const backOnNewsListPage = () => {

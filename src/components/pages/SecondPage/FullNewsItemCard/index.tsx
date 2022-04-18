@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
 import {FaRegComments} from 'react-icons/fa';
-import CommentsList from '@Pages/SecondPage/elements/CommentsList';
+import CommentsList from '@Pages/SecondPage/CommentsList';
 import Loader from '@Elements/Loader';
-import {FullNewsItemCardProps} from '@Redux/types/Newstypes';
+import {FullNewsItemCardProps} from '@Redux/types/newsTypes';
 import { useTypedSelector } from '@Hooks/useTypedSelector';
 import { useActions } from '@Hooks/useActions';
 

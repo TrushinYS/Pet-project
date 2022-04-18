@@ -1,6 +1,6 @@
 import { FC, Fragment, useState } from 'react';
 import {FaRegComments} from 'react-icons/fa'
-import {RootCommentItemProps} from '@Redux/types/Newstypes';
+import {RootCommentItemProps} from '@Redux/types/newsTypes';
 
 const RootCommentItem: FC<RootCommentItemProps> = ({rootComment}) => {
 	const [subcomment, SetSubcomment] = useState<boolean>(false);
@@ -19,7 +19,7 @@ const RootCommentItem: FC<RootCommentItemProps> = ({rootComment}) => {
 		<Fragment>
 			<hr/>
 			<p className = 'white-text' dangerouslySetInnerHTML = {createMarkup()}></p>
-			<p className = 'yellow-text'>Автор: {rootComment.by || 'Неизвестен'} | Дата: {rootComment.time || 'Неизвестна'} | <span onClick = {onOpenSubComment}><FaRegComments/> : {rootComment.kids ? rootComment.kids.length : 0}</span></p>
+			<p className = 'yellow-text'>Автор: {rootComment.by || 'Неизвестен'} | Дата: {rootComment.time || 'Неизвестна'} | <span onClick = {onOpenSubComment}><FaRegComments className={rootComment.kids ? 'cursor' : '' }/> : {rootComment.kids ? rootComment.kids.length : 0}</span></p>
 			{rootComment.kids && subcomment
 				&& (
 					<div className = 'news-item-page-subcomment'>

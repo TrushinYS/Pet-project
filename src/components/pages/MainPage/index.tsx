@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import LittleNewsItemCard from '@Pages/MainPage/LittleNewsItemCard/LittleNewsItemCard';
+import LittleNewsItemCard from '@Pages/MainPage/LittleNewsItemCard';
 import Loader from '@Elements/Loader';
 import ErrorMessage from '@Elements/ErrorMessage';
 import { useTypedSelector } from '@Hooks/useTypedSelector';

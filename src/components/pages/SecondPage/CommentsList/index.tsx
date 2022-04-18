@@ -1,6 +1,6 @@
 import {FC, Fragment} from 'react';
-import RootCommentItem from '@Pages/SecondPage/elements/RootCommentItem';
-import {CommentsListProps} from '@Redux/types/Newstypes';
+import RootCommentItem from '@Pages/SecondPage/RootCommentItem';
+import {CommentsListProps} from '@Redux/types/newsTypes';
 
 const CommentsList: FC<CommentsListProps> = ({ newsItem }) => {
 

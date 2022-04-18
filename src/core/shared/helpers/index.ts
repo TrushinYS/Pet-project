@@ -1,7 +1,7 @@
 import { ILittleNewsItemCardWithConvDate, 
 	ILittleNewsItemCard, 
 	INormalNewsItemComment, 
-	INormalNewsItemCommentWithConvDate } from '@Redux/types/Newstypes';
+	INormalNewsItemCommentWithConvDate } from '@Redux/types/newsTypes';
 
 //функция для преобразования даты
 export function onConvertDate(newsItem: ILittleNewsItemCard): ILittleNewsItemCardWithConvDate {

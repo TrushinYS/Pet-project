@@ -1,12 +1,12 @@
 import { Dispatch } from 'redux';
-import { AppActions, AppActionTypes } from '@Redux/types/Apptypes';
+import { AppActions, AppActionTypes } from '@Redux/types/appTypes';
 import { ILittleNewsItemCardWithConvDate, 
 	NewsActions, 
 	NewsActionTypes, 
 	NewsID, 
-	IFullNewsItem } from '@Redux/types/Newstypes';
-import { onConvertDate } from '@Helpers/index';
-import Api from '@Api/index';
+	IFullNewsItem } from '@Redux/types/newsTypes';
+import { onConvertDate } from '@Shared/helpers';
+import Api from '@Shared/api';
 
 let timerNewsList: ReturnType<typeof setTimeout>;
 let timerNewsItemPage: ReturnType<typeof setTimeout>;

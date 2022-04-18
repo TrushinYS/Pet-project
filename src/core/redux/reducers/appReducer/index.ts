@@ -1,6 +1,6 @@
 import { AppActions, 
 	AppActionTypes, 
-	AppState } from '@Redux/types/Apptypes';
+	AppState } from '@Redux/types/appTypes';
 
 const inititalState: AppState = {
 	page: false,

@@ -4,7 +4,7 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
 module.exports = {
 	mode: 'development',
-	entry: path.resolve(__dirname, 'src', './index.tsx'),
+	entry: path.resolve(__dirname, 'src', 'index.tsx'),
 	output: {
 		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, 'dist')
@@ -12,6 +12,7 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: path.resolve(__dirname, 'public', 'index.html'),
+			favicon: './src/icons/favicon.ico',
 		}),
 		new CleanWebpackPlugin({
 			protectWebpackAssets: false,
@@ -35,11 +36,6 @@ module.exports = {
 				exclude: /node_modules/,
 				use: ['ts-loader'],
 			},
-			{
-				test: /\.js$/,
-				enforce: 'pre',
-				use: ['source-map-loader']
-			}
 		]
 	},
 	devServer: {
@@ -52,10 +48,9 @@ module.exports = {
 			'@': path.resolve(__dirname, 'src'),
 			'@Pages': path.resolve(__dirname, 'src/components/pages'),
 			'@Elements': path.resolve(__dirname, 'src/components/elements'),
-			'@Helpers': path.resolve(__dirname, 'src/core/helpers'),
+			'@Shared': path.resolve(__dirname, 'src/core/shared'),
 			'@Hooks': path.resolve(__dirname, 'src/core/hooks'),
 			'@Redux': path.resolve(__dirname, 'src/core/redux'),
-			'@Api': path.resolve(__dirname, 'src/core/shared/api'),
 			'@Css': path.resolve(__dirname, 'src/css')
 		}
 	}
