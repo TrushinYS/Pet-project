@@ -3,4 +3,4 @@ import { rootReducer } from '@Redux/reducers/rootReducer';
 
 type RootState = ReturnType<typeof rootReducer>;
 
-export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useTypedSelector:TypedUseSelectorHook<RootState> = useSelector;

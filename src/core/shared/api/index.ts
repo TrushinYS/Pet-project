@@ -1,13 +1,8 @@
-import { ILittleNewsItemCardWithConvDate, 
-	ILittleNewsItemCard, 
-	NewsID, 
-	TypesOfComments } from '@Redux/types/newsTypes';
+import { ILittleNewsItemCard, NewsID} from '@Redux/types/newsTypes';
 
-import { onConvertDate } from '@Shared/helpers';
+import { onGetAdressBar } from '@Shared/helpers';
 
 const hackerNewsID: string = 'https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty&orderBy=%22$key%22&limitToFirst=100';
-const hackerNewsItemPart1: string = 'https://hacker-news.firebaseio.com/v0/item/';
-const hackerNewsItemPart2: string = '.json?print=pretty';
 
 export default class Api {
 	static async onFetchNewsListID(): Promise<number[]> {
@@ -16,23 +11,16 @@ export default class Api {
 		return json;
 	};
 
-	static async onFetchNewsList(newsList: number[]): Promise<ILittleNewsItemCardWithConvDate[]> {
-		const response = await Promise.all(newsList.map((item: number) => fetch(hackerNewsItemPart1 + `${item}` + hackerNewsItemPart2)));
+	static async onFetchNewsList(newsList: number[]): Promise<ILittleNewsItemCard[]> {
+		const response = await Promise.all(newsList.map((item: number) => fetch(onGetAdressBar<Number>(item))));
 		const json = await Promise.all(response.map(item => item.json()));
-		const fetchNewsList = json.map(item => onConvertDate(item));
-
-		return fetchNewsList
+		return json
 	};
 
-	static async onFetchNewsItem(id: NewsID): Promise<ILittleNewsItemCard> {
-		const response = await fetch(hackerNewsItemPart1 + `${id}` + hackerNewsItemPart2);
+	static async onFetchNewsItem<returningTypeOfFetchNewsItem>(id: NewsID): Promise<returningTypeOfFetchNewsItem> {
+		const response = await fetch(onGetAdressBar<NewsID>(id));
 		const json = await response.json();
 		return json
 	};
 
-	static async onFetchNewsItemComments(id: NewsID): Promise<TypesOfComments> {
-		const response = await fetch(hackerNewsItemPart1 + `${id}` + hackerNewsItemPart2);
-		const json = await response.json();
-		return json
-	};
 }

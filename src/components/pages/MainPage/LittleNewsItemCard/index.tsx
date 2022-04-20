@@ -1,9 +1,9 @@
-import {FC} from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {LittleNewsItemCardProps} from '@Redux/types/newsTypes';
+import { LittleNewsItemCardProps } from '@Redux/types/newsTypes';
 
-const LittleNewsItemCard: FC<LittleNewsItemCardProps> = ( {news} ) => {
-	const navigate= useNavigate();
+const LittleNewsItemCard:FC<LittleNewsItemCardProps> = ( {news} ) => {
+	const navigate = useNavigate();
 
 	const openNewsItemPage = () => {
 		navigate('/' + news.id)

@@ -8,7 +8,7 @@ const inititalState: AppState = {
 	fetchError: false
 };
 
-export const appReducer = (state = inititalState, action: AppActions):AppState => {
+export const appReducer = (state = inititalState, action: AppActions): AppState => {
 	switch(action.type) {
 		case AppActionTypes.SHOW_LOADER_PAGE:
 			return {...state, page: true};

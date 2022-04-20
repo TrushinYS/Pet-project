@@ -4,27 +4,25 @@ import { ILittleNewsItemCardWithConvDate,
 	NewsActions, 
 	NewsActionTypes, 
 	NewsID, 
-	IFullNewsItem } from '@Redux/types/newsTypes';
+	IFullNewsItem, 
+	ILittleNewsItemCard,
+	INormalNewsItemComment,
+	INormalNewsItemCommentWithConvDate,
+	IFullNewsItemComment,
+	TypesOfComments} from '@Redux/types/newsTypes';
 import { onConvertDate } from '@Shared/helpers';
 import Api from '@Shared/api';
-
-let timerNewsList: ReturnType<typeof setTimeout>;
-let timerNewsItemPage: ReturnType<typeof setTimeout>;
-
-let timeSecond: number = 0;
-let timerToUpdate: ReturnType<typeof setTimeout>;
 
 //общая функция для загрузки новостей
 async function onFetchNewsList(): Promise<ILittleNewsItemCardWithConvDate[]> {
 	const newsListID = await Api.onFetchNewsListID();
 	const newsList = await Api.onFetchNewsList(newsListID);
-	return newsList
+	const newsListWithConvDate = newsList.map(item => onConvertDate<ILittleNewsItemCard, ILittleNewsItemCardWithConvDate>(item));
+	return newsListWithConvDate
 };
 
 //первичная/принудительная(по клику на кнопку) загрузка новостей
 export function onLoadNewsList() {
-	clearTimeout(timerNewsList);
-	
 	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		dispatch({
 			type: AppActionTypes.SHOW_LOADER_PAGE,
@@ -57,58 +55,38 @@ export function onLoadNewsList() {
 
 //автоматическое обновление новостей
 export function autoUpdateNewsList() {
-	clearTimeout(timerNewsItemPage);
-	clearTimeout(timerNewsList);
-	clearInterval(timerToUpdate);
-
-	const timeSecNewsList = timeSecond * 1000;
-	timeSecond = 0;
-
 	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
-		return timerNewsList = setTimeout(async function() {
+		dispatch({
+			type: AppActionTypes.FETCH_ERROR_MESSAGE,
+			payload: false,
+		});
+
+		try {
+			const autoNewsList = await onFetchNewsList();
 			dispatch({
-				type: AppActionTypes.FETCH_ERROR_MESSAGE,
-				payload: false,
+				type: NewsActionTypes.NEWS_LIST,
+				payload: autoNewsList
+				
 			});
 
-			try {
-				const autoNewsList = await onFetchNewsList();
-				dispatch({
-					type: NewsActionTypes.NEWS_LIST,
-					payload: autoNewsList
-					
-				});
-
-			} catch(e) {
-				dispatch({
-					type: AppActionTypes.FETCH_ERROR_MESSAGE,
-					payload: true,
-				});
-			}
-		}, 60000 - timeSecNewsList)
+		} catch(e) {
+			dispatch({
+				type: AppActionTypes.FETCH_ERROR_MESSAGE,
+				payload: true,
+			});
+		}
 	}
 };
 
 //общая функция для загрузки данных новости
 async function onFetchNewsItem(id: NewsID) {
-	const newsItem = await Api.onFetchNewsItem(id);
-	const fetchNewsItem = onConvertDate(newsItem);
+	const newsItem = await Api.onFetchNewsItem<ILittleNewsItemCard>(id);
+	const fetchNewsItem = onConvertDate<ILittleNewsItemCard, ILittleNewsItemCardWithConvDate>(newsItem);
 	return fetchNewsItem
 };
 
 //первичная загрузка новости при входе на её страницу
 export function onLoadNewsItem(id: NewsID) {
-	clearTimeout(timerNewsList);
-	clearInterval(timerToUpdate);
-
-	timerToUpdate = setInterval(() => {
-		if (timeSecond === 60) {
-			timeSecond = 60;
-			clearInterval(timerToUpdate);
-		}
-		++timeSecond
-	}, 1000);
-
 	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		dispatch({
 			type: AppActionTypes.SHOW_LOADER_PAGE
@@ -121,7 +99,7 @@ export function onLoadNewsItem(id: NewsID) {
 
 		try {
 			const fetchNewsItem = await onFetchNewsItem(id);
-			const newsItem = await onLoadComments(fetchNewsItem);
+			const newsItem = await onLoadComments<ILittleNewsItemCardWithConvDate, IFullNewsItem>(fetchNewsItem);
 			
 			dispatch({
 				type: NewsActionTypes.NEWS_ITEM,
@@ -144,8 +122,6 @@ export function onLoadNewsItem(id: NewsID) {
 
 //обновление новости по клику на кнопку
 export function onUpdateCommentsNewsItem(id: NewsID) {
-	clearTimeout(timerNewsItemPage);
-
 	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
 		dispatch({
 			type: AppActionTypes.SHOW_LOADER_COMMENTS
@@ -158,7 +134,7 @@ export function onUpdateCommentsNewsItem(id: NewsID) {
 
 		try {
 			const fetchNewsItem = await onFetchNewsItem(id);
-			const newsItem = await onLoadComments(fetchNewsItem);
+			const newsItem = await onLoadComments<ILittleNewsItemCardWithConvDate, IFullNewsItem>(fetchNewsItem);
 
 			setTimeout(() => {
 				dispatch({
@@ -187,49 +163,46 @@ export function onUpdateCommentsNewsItem(id: NewsID) {
 
 //автообновление страницы новости
 export function autoUpdateNewsItem(id: NewsID) {
-	clearTimeout(timerNewsItemPage);
-
 	return async (dispatch: Dispatch<AppActions | NewsActions>) => {
-		return timerNewsItemPage = setTimeout(async function() {
+		dispatch({
+			type: AppActionTypes.FETCH_ERROR_MESSAGE,
+			payload: false,
+		});
+
+		try {
+			const fetchNewsItem = await onFetchNewsItem(id);
+			const newsItem = await onLoadComments<ILittleNewsItemCardWithConvDate, IFullNewsItem>(fetchNewsItem);
+
+			dispatch({
+				type: NewsActionTypes.NEWS_ITEM,
+				payload: newsItem
+			});
+			
+		} catch(e) {
 			dispatch({
 				type: AppActionTypes.FETCH_ERROR_MESSAGE,
-				payload: false,
+				payload: true,
 			});
-
-			try {
-				const fetchNewsItem = await onFetchNewsItem(id);
-				const newsItem = await onLoadComments(fetchNewsItem);
-
-				dispatch({
-					type: NewsActionTypes.NEWS_ITEM,
-					payload: newsItem
-				});
-				
-			} catch(e) {
-				dispatch({
-					type: AppActionTypes.FETCH_ERROR_MESSAGE,
-					payload: true,
-				});
-			}
-		}, 60000);
+		}
 	}
 };
 
 //рекурсивная функция загрузки комментариев новости
-async function onLoadComments(newsPost: ILittleNewsItemCardWithConvDate) : Promise<IFullNewsItem> {
+async function onLoadComments<acceptedTypeOfLoadComments, returningTypeOfLoadComments>(newsPost: acceptedTypeOfLoadComments) : Promise<returningTypeOfLoadComments> {
 	const news = JSON.parse(JSON.stringify(newsPost));
 
 	if (!news.kids) {
 		return news;
 	} else {
-		const newsKids = await Promise.all(news.kids.map((item: NewsID) => Api.onFetchNewsItemComments(item)));
+		const newsKids = await Promise.all(news.kids.map((item: NewsID) => Api.onFetchNewsItem<TypesOfComments>(item)));
 		const activeNewsKids = newsKids.filter(item => !item.deleted && !item.dead);
 
 		activeNewsKids.sort((a, b) => a.time - b.time);
-		const newsComments = activeNewsKids.map(item => onConvertDate(item));
+		const newsComments = activeNewsKids.map(item => onConvertDate<INormalNewsItemComment, INormalNewsItemCommentWithConvDate>(item));
 
-		news.kids = await Promise.all(newsComments.map(item => onLoadComments(item)));
+		news.kids = await Promise.all(newsComments.map(item => onLoadComments<INormalNewsItemCommentWithConvDate, IFullNewsItemComment>(item)));
 		return news;
 	}
 };
+
 

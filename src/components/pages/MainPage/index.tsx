@@ -4,28 +4,35 @@ import Loader from '@Elements/Loader';
 import ErrorMessage from '@Elements/ErrorMessage';
 import { useTypedSelector } from '@Hooks/useTypedSelector';
 import { useActions } from '@Hooks/useActions';
+import { onResetTimeSecNewsList, timeSecNewsList } from '@Shared/helpers';
 
-const NewsListPage: FC = () => {
+const NewsListPage:FC = () => {
 	const newsList = useTypedSelector(state => state.news.newsList);
 	const pageLoader = useTypedSelector(state => state.app.page);
 	const fetchErrorMessage = useTypedSelector(state => state.app.fetchError);
 
-	const {onLoadNewsList, autoUpdateNewsList} = useActions();
+	const { onLoadNewsList, autoUpdateNewsList } = useActions();
 	
 	const onUpdateNews = () => {
 		onLoadNewsList();
 	};
 
 	useEffect(() => {
-		if (Object.keys(newsList).length !== 0) {
+		if (newsList.length !== 0) {
 			return
 		}
-			
 		onLoadNewsList();
 	}, []);
 
 	useEffect(() => {
-		autoUpdateNewsList();
+		let timeMSecNewsList = timeSecNewsList * 1000;
+		const timerNewsList = setTimeout(() => {
+			autoUpdateNewsList();
+		}, 60000 - timeMSecNewsList);
+		return (() => {
+			clearTimeout(timerNewsList);
+			onResetTimeSecNewsList();
+		});
 	}, [newsList]);
 	
 	return (

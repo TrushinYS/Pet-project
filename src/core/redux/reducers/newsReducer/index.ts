@@ -16,13 +16,13 @@ const inititalState: NewsState = {
 	},
 };
 
-export const newsReducer = (state = inititalState, action:NewsActions):NewsState => {
+export const newsReducer = (state = inititalState, action:NewsActions): NewsState => {
 	switch(action.type) {
 		case NewsActionTypes.NEWS_LIST:
 			return {...state, newsList: action.payload};
 
 		case NewsActionTypes.NEWS_ITEM:
-			return {...state, newsItem: action.payload}
+			return {...state, newsItem: action.payload};
 
 		default: return state
 	}

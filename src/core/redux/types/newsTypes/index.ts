@@ -38,7 +38,7 @@ export interface INormalNewsItemCommentWithConvDate extends IBasicNewsItemCommen
 	time: string,
 };
 
-interface IFullNewsItemComment extends IBasicNewsItemComment {
+export interface IFullNewsItemComment extends IBasicNewsItemComment {
 	by: string,
 	kids?: IFullNewsItemComment[],
 	time: string

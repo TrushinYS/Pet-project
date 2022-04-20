@@ -1,20 +1,26 @@
 import { FC, useEffect } from 'react';
-import {FaRegComments} from 'react-icons/fa';
+import { FaRegComments } from 'react-icons/fa';
 import CommentsList from '@Pages/SecondPage/CommentsList';
 import Loader from '@Elements/Loader';
-import {FullNewsItemCardProps} from '@Redux/types/newsTypes';
+import { FullNewsItemCardProps } from '@Redux/types/newsTypes';
 import { useTypedSelector } from '@Hooks/useTypedSelector';
 import { useActions } from '@Hooks/useActions';
 
 
-const FullNewsItemCard: FC<FullNewsItemCardProps> = ({ newsItemID }) => {
+const FullNewsItemCard:FC<FullNewsItemCardProps> = ( {newsItemID} ) => {
 	const commentsLoader = useTypedSelector(state => state.app.comments);
 	const newsItem = useTypedSelector(state => state.news.newsItem);
 
-	const {autoUpdateNewsItem} = useActions();
+	const { autoUpdateNewsItem } = useActions();
 
 	useEffect(() => {
-		autoUpdateNewsItem(newsItemID)
+		const timerNewsItemPage = setTimeout(() => {
+			autoUpdateNewsItem(newsItemID)
+		}, 60000);
+		
+		return (() => {
+			clearTimeout(timerNewsItemPage);
+		});
 	}, [newsItem]);
 
 	return (
