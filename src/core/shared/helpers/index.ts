@@ -31,7 +31,7 @@ export function onConvertDate<acceptedTypeOfConvertDate, returningTypeOfConvertD
 	const newsHours = newsDate.getHours();
 	const newsMin = newsDate.getMinutes();
 	const newsDay = newsDate.getDate();
-	const newsMonth = newsDate.getMonth();
+	const newsMonth = newsDate.getMonth() + 1;
 	const newsYear = newsDate.getFullYear();
 	
 	const dateArr = [newsHours, newsMin, newsDay, newsMonth, newsYear];
