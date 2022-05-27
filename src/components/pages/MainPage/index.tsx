@@ -11,12 +11,6 @@ const NewsListPage:FC = () => {
 	const pageLoader = useTypedSelector(state => state.app.page);
 	const fetchErrorMessage = useTypedSelector(state => state.app.fetchError);
 
-	const { onLoadNewsList, autoUpdateNewsList } = useActions();
-	
-	const onUpdateNews = () => {
-		onLoadNewsList();
-	};
-
 	useEffect(() => {
 		if (newsList.length !== 0) {
 			return
@@ -34,6 +28,12 @@ const NewsListPage:FC = () => {
 			onResetTimeSecNewsList();
 		});
 	}, [newsList]);
+
+	const { onLoadNewsList, autoUpdateNewsList } = useActions();
+	
+	const onUpdateNews = () => {
+		onLoadNewsList();
+	};
 	
 	return (
 		<div className = 'container center'>

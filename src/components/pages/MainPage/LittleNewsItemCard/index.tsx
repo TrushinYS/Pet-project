@@ -6,7 +6,7 @@ const LittleNewsItemCard:FC<LittleNewsItemCardProps> = ( {news} ) => {
 	const navigate = useNavigate();
 
 	const openNewsItemPage = () => {
-		navigate('/' + news.id)
+		navigate('/Pet-project/' + news.id)
 	};
 
 	return (

@@ -7,7 +7,7 @@ import { useTypedSelector } from '@Hooks/useTypedSelector';
 import { useActions } from '@Hooks/useActions';
 import { onRunTimerToUpdateNewsList, timerToUpdateNewsList } from '@Shared/helpers';
 
-const NewsItemPage:FC = () => {
+const NewsItemPage: FC = () => {
 	const navigate = useNavigate();
 	const { onUpdateCommentsNewsItem, onLoadNewsItem } = useActions();
 
@@ -23,7 +23,7 @@ const NewsItemPage:FC = () => {
 	}, []);
 
 	const backOnNewsListPage = () => {
-		navigate('/');
+		navigate('/Pet-project/');
 		clearInterval(timerToUpdateNewsList);
 	};
 
@@ -32,16 +32,16 @@ const NewsItemPage:FC = () => {
 	};
 
 	return (
-		<main className = 'container center news-item-page'>
-			{fetchErrorMessage && 
-				<ErrorMessage/>
+		<main className='container center news-item-page'>
+			{fetchErrorMessage &&
+				<ErrorMessage />
 			}
 			<section>
-				<button onClick = {backOnNewsListPage} className = 'waves-effect waves-light btn news-item-page-btn'>К списку новостей</button>
-				<button onClick = {onUpdateComments} className = 'waves-effect waves-light btn news-item-page-btn'>Обновить комментарии</button>
+				<button onClick={backOnNewsListPage} className='waves-effect waves-light btn news-item-page-btn'>К списку новостей</button>
+				<button onClick={onUpdateComments} className='waves-effect waves-light btn news-item-page-btn'>Обновить комментарии</button>
 			</section>
 			<section>
-				{pageLoader ? <Loader/> : <FullNewsItemCard newsItemID = {newsItemID}/>}
+				{pageLoader ? <Loader /> : <FullNewsItemCard newsItemID={newsItemID} />}
 			</section>
 		</main>
 	)

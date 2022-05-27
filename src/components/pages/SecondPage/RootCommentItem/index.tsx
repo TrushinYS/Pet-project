@@ -3,7 +3,7 @@ import { FaRegComments } from 'react-icons/fa'
 import { RootCommentItemProps } from '@Redux/types/newsTypes';
 
 const RootCommentItem:FC<RootCommentItemProps> = ( {rootComment} ) => {
-	const [subcomment, SetSubcomment] = useState<boolean>(false);
+	const [subcomment, SetSubcomment] = useState(false);
 
 	const onOpenSubComment = () => {
 		SetSubcomment(!subcomment)
