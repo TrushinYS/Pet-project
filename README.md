@@ -1,4 +1,4 @@
-#Pet-project: news site
+# Pet-project: news site
 ***
 [Ссылка на сайт новостей](https://trushinys.github.io/Pet-project/)
 * Сайт новостей, загружаемых с внешнего Api. 
