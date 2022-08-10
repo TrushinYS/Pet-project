@@ -11,6 +11,8 @@ const NewsListPage:FC = () => {
 	const pageLoader = useTypedSelector(state => state.app.page);
 	const fetchErrorMessage = useTypedSelector(state => state.app.fetchError);
 
+	const { onLoadNewsList, autoUpdateNewsList } = useActions();
+
 	useEffect(() => {
 		if (newsList.length !== 0) {
 			return
@@ -28,26 +30,22 @@ const NewsListPage:FC = () => {
 			onResetTimeSecNewsList();
 		});
 	}, [newsList]);
-
-	const { onLoadNewsList, autoUpdateNewsList } = useActions();
 	
 	const onUpdateNews = () => {
 		onLoadNewsList();
 	};
 	
 	return (
-		<div className = 'container center'>
+		<main className = 'container center'>
 			{fetchErrorMessage && 
 				<ErrorMessage/>
 			}
-			<h3>Последние 100 новостей</h3>
-			<section>
-				<button onClick = {onUpdateNews} className = 'waves-effect waves-light btn'><i className = 'material-icons left'>cloud</i>Обновить новости</button>
-				<div>
-					{pageLoader ? <Loader/> : newsList.map((news) => <LittleNewsItemCard key = {news.id} news = {news}/>)}
-				</div>
-			</section>
-		</div>
+			<h1>Последние 100 новостей</h1>
+			<button onClick = {onUpdateNews} className = 'waves-effect waves-light btn'><i className = 'material-icons left'>cloud</i>Обновить новости</button>
+			<div>
+				{pageLoader ? <Loader/> : newsList.map((news) => <LittleNewsItemCard key = {news.id} news = {news}/>)}
+			</div>
+		</main>
 	)
 };
 

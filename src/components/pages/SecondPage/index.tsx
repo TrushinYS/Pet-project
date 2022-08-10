@@ -23,7 +23,7 @@ const NewsItemPage: FC = () => {
 	}, []);
 
 	const backOnNewsListPage = () => {
-		navigate('/Pet-project/');
+		navigate('/');
 		clearInterval(timerToUpdateNewsList);
 	};
 
@@ -36,13 +36,13 @@ const NewsItemPage: FC = () => {
 			{fetchErrorMessage &&
 				<ErrorMessage />
 			}
-			<section>
+			<div>
 				<button onClick={backOnNewsListPage} className='waves-effect waves-light btn news-item-page-btn'>К списку новостей</button>
 				<button onClick={onUpdateComments} className='waves-effect waves-light btn news-item-page-btn'>Обновить комментарии</button>
-			</section>
-			<section>
+			</div>
+			<div>
 				{pageLoader ? <Loader /> : <FullNewsItemCard newsItemID={newsItemID} />}
-			</section>
+			</div>
 		</main>
 	)
 };

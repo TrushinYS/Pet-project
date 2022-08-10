@@ -2,7 +2,7 @@ body{
 	background-color: lightgrey;
 }
 
-.cursor {
+.little-card {
 	cursor: pointer;
 }
 
@@ -22,6 +22,10 @@ body{
 .news-item-page-subcomment {
 	background-color: lightslategray;
 	padding: 0 5px 0 80px;
+}
+
+.cursor {
+	cursor: pointer;
 }
 
 .lds-ring {
