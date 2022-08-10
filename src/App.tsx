@@ -7,8 +7,8 @@ const App:FC = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path = '/' element = {<NewsListPage/>}/>
-				<Route path = '/:id' element = {<NewsItemPage/>} />
+				<Route path = '/Pet-project/' element = {<NewsListPage/>}/>
+				<Route path = '/Pet-project/:id' element = {<NewsItemPage/>} />
 			</Routes>
 		</BrowserRouter>
 		

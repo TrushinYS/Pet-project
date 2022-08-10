@@ -23,7 +23,7 @@ const NewsItemPage: FC = () => {
 	}, []);
 
 	const backOnNewsListPage = () => {
-		navigate('/');
+		navigate('/Pet-project/');
 		clearInterval(timerToUpdateNewsList);
 	};
 
